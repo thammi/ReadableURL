@@ -2,11 +2,16 @@
 
 An NPM package to generate readable random phrases to add to dynamically generated URLs.
 
-[GitHub repository](https://github.com/sharadbhat/ReadableURL)
-
 To generate readable URLs like Twitch's clips.
 
 Example: https://clips.twitch.tv/WiseAcceptableSnoodPupper
+
+This project is forked from:
+
+[GitHub repository](https://github.com/sharadbhat/ReadableURL)
+
+It adds support for usage in browsers (using tools like webpack and browserify)
+and removes the need to read word files at runtime.
 
 ### Get started
 To install,
