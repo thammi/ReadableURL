@@ -1,4 +1,4 @@
-# readable-url
+# readable-url-names
 
 An NPM package to generate readable random phrases to add to dynamically generated URLs.
 
@@ -16,13 +16,13 @@ and removes the need to read word files at runtime.
 ### Get started
 To install,
 ```sh
-npm install readable-url
+npm install readable-url-names
 ```
 
 ### Usage Instructions
 To use the package, first require it.
 ```js
-const readable = require("readable-url");
+const readable = require("readable-url-names");
 ```
 
 Then, we create an object.
