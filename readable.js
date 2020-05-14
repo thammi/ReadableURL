@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+const adjectives = require('./words/adjectives.json');
+const nouns = require('./words/nouns.json');
+
+function pick(words) {
+  const index = Math.floor(Math.random() * words.length)
+  return words[index];
+}
 
 /**
  * Initializes the object.
@@ -8,20 +13,16 @@ const path = require('path');
  * @param {string} [seperator=''] - The word seperator.
  */
 function readable(capitalize=true, wordCount=3, seperator='') {
-  if (wordCount < 2) {
+  if (wordCount < 1) {
     throw new Error('Minimum value expected: 2');
-  }
-  else if (wordCount > 10) {
-    throw new Error('Maximum value expected: 10');
   }
 
   this.capitalize = capitalize;
   this.wordCount = wordCount;
   this.seperator = seperator
 
-  this.vowels = ['a', 'e', 'i', 'o', 'u'];
-  this.adjectives = fs.readFileSync(path.join(__dirname, 'words', 'adjectives.txt')).toString().split(' ');
-  this.nouns = fs.readFileSync(path.join(__dirname, 'words', 'nouns.txt')).toString().split(' ');
+  this.adjectives = [...adjectives];
+  this.nouns = [...nouns];
 }
 
 /**
@@ -42,45 +43,20 @@ readable.prototype.convertToTitleCase = function (wordsList) {
  */
 readable.prototype.generate = function () {
   wordsList = [];
-  wordsList.push(this.adjectives[Math.floor(Math.random() * this.adjectives.length)]);
-  wordsList.push(this.nouns[Math.floor(Math.random() * this.nouns.length)]);
 
-  if (this.wordCount > 5){
-    for (var i = 0; i < this.wordCount - 2; i++) {
-      wordsList.unshift(this.adjectives[Math.floor(Math.random() * this.adjectives.length)]);
-    }
+  const oddWordCount = this.wordCount % 2 == 1;
+
+  for(let i = 0; i < this.wordCount; i++) {
+    const isOdd = i % 2 == 1;
+    const isAdjective = oddWordCount ? (i == 0 || isOdd) : !isOdd;
+    const wordChoices = isAdjective ? this.adjectives : this.nouns;
+    wordsList.push(pick(wordChoices));
   }
-  else {
-    if (this.wordCount > 2) {
-      wordsList.unshift(this.adjectives[Math.floor(Math.random() * this.adjectives.length)]);
-    }
-
-    if (this.wordCount > 3) {
-      var isVowel = false;
-      var firstLetter = wordsList[0][0];
-      for(var i = 0; i < 5; i++)
-      {
-        if (this.vowels[i] === firstLetter) {
-          isVowel = true;
-          break;
-        }
-      }
-      if (isVowel) {
-        wordsList.unshift('an');
-      }
-      else {
-        wordsList.unshift(['a', 'the'][Math.floor(Math.random() * 2)]);
-      }
-    }
-
-    if (this.wordCount > 4) {
-      wordsList.splice(2, 0, 'and');
-    }
-  }
-
+  
   if (this.capitalize) {
     wordsList = this.convertToTitleCase(wordsList);
   }
+
   return wordsList.join(this.seperator);
 }
 
