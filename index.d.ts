@@ -3,4 +3,7 @@ declare class readable {
   generate(): string;
 }
 
+declare namespace readable {
+}
+
 export = readable;
